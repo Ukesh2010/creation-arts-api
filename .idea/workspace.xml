@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="b771aff3-1728-4eba-8df8-aa02b3f3450b" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/app.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/routes/api/tweets.js" beforeDir="false" afterPath="$PROJECT_DIR$/routes/api/tweets.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/validation/tweets.js" beforeDir="false" afterPath="$PROJECT_DIR$/validation/tweets.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/validation/valid-text.js" beforeDir="false" afterPath="$PROJECT_DIR$/validation/valid-text.js" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ComposerSettings">
+    <execution />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectId" id="1kJxlG3vI4jsjINuBtQRX8pwPct" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="DatabaseDriversLRU" value="mongo" />
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="vue.rearranger.settings.migration" value="true" />
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="b771aff3-1728-4eba-8df8-aa02b3f3450b" name="Default Changelist" comment="" />
+      <created>1605432646230</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1605432646230</updated>
+      <workItem from="1605432648327" duration="531000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="300" y="59" width="800" height="684" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1605433170941">
+      <screen x="44" y="27" width="1322" height="741" />
+    </state>
+    <state x="300" y="59" width="800" height="684" key="#com.intellij.execution.impl.EditConfigurationsDialog/44.27.1322.741@44.27.1322.741" timestamp="1605433170941" />
+  </component>
+</project>

@@ -3,7 +3,8 @@ const app = express();
 const bodyParser = require("body-parser");
 const passport = require("passport");
 const users = require("./routes/api/users");
-const tweets = require("./routes/api/tweets");
+const categories = require("./routes/api/categories");
+const products = require("./routes/api/products");
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
@@ -16,7 +17,8 @@ app.get("/", (req, res) => {
 });
 
 app.use("/api/users", users);
-app.use("/api/tweets", tweets);
+app.use("/api/categories", categories);
+app.use("/api/products", products);
 
 const port = process.env.PORT || 5000;
 
