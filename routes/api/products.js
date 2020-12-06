@@ -29,7 +29,18 @@ router.get("/", (req, res) => {
 
 router.get("/:id", (req, res) => {
   Product.findById(req.params.id)
-    .then((product) => res.json(product.toObject()))
+    .lean()
+    .then(({ images, ...item }) =>
+      res.json({
+        ...item,
+        images: images
+          ? images.map(({ originalname, filename }) => ({
+              originalFileName: originalname,
+              url: `${req.protocol}://${req.get("host")}/static/${filename}`,
+            }))
+          : [],
+      })
+    )
     .catch((err) =>
       res.status(404).json({ message: "No product found with that ID" })
     );
