@@ -35,15 +35,13 @@ router.get("/:id", (req, res) => {
     );
 });
 const uploadMiddleware = multer({
-  dest: "uploads/",
-  // storage: multer.diskStorage({
-  //   destination: function (req, file, cb) {
-  //     cb(null, "uploads/");
-  //   },
-  //   filename: function (req, file, cb) {
-  //     cb(null, uniqueString() + path.extname(file.originalname));
-  //   },
-  // }),
+  // dest: "uploads/",
+  storage: multer.diskStorage({
+    destination: "uploads/",
+    filename: function (req, file, cb) {
+      cb(null, uniqueString() + path.extname(file.originalname));
+    },
+  }),
 }).array("images", 8);
 
 router.post(
