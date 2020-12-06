@@ -37,7 +37,7 @@ router.get("/:id", (req, res) => {
 const uploadMiddleware = multer({
   storage: multer.diskStorage({
     destination: function (req, file, cb) {
-      cb(null, "uploads/");
+      cb(null, __dirname + "/uploads/");
     },
     filename: function (req, file, cb) {
       cb(null, uniqueString() + path.extname(file.originalname));
