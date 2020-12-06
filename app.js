@@ -6,6 +6,8 @@ const users = require("./routes/api/users");
 const categories = require("./routes/api/categories");
 const products = require("./routes/api/products");
 
+app.use("/static", express.static("uploads"));
+
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 

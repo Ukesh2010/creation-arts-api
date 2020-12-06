@@ -20,8 +20,15 @@ ProductSchema = new Schema({
     type: Number,
     required: true,
   },
+  images: [
+    {
+      originalname: { type: String, required: true },
+      mimetype: { type: String, required: true },
+      filename: { type: String, required: true },
+      path: { type: String, required: true },
+    },
+  ],
 });
-
 ProductSchema.plugin(mongoosePaginate);
 
 module.exports = Product = mongoose.model("Product", ProductSchema);
