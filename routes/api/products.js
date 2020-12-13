@@ -6,8 +6,9 @@ const path = require("path");
 const uniqueString = require("unique-string");
 
 const Product = require("../../models/Product");
-const validateProductInput = require("../../validation/products");
 const { isAdmin } = require("../../middlewares/role");
+const productValidator = require("../../validation/products");
+const validate = require("../../validation/validate");
 
 const uploadMiddleware = multer({
   storage: multer.diskStorage({
@@ -61,13 +62,9 @@ router.post(
   passport.authenticate("jwt", { session: false }),
   isAdmin(),
   uploadMiddleware,
+  productValidator,
+  validate,
   (req, res) => {
-    const { errors, isValid } = validateProductInput(req.body);
-
-    if (!isValid) {
-      return res.status(400).json(errors);
-    }
-
     const newProduct = new Product({
       createdBy: req.user.id,
       category: req.body.category,
@@ -84,13 +81,9 @@ router.put(
   passport.authenticate("jwt", { session: false }),
   isAdmin(),
   uploadMiddleware,
+  productValidator,
+  validate,
   (req, res) => {
-    const { errors, isValid } = validateProductInput(req.body);
-
-    if (!isValid) {
-      return res.status(400).json(errors);
-    }
-
     Product.findById(req.params.id)
       .then((product) => {
         product.category = req.body.category;

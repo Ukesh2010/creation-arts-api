@@ -1,21 +1,32 @@
-const Validator = require("validator");
-const validText = require("./valid-text");
+const { check, body } = require("express-validator");
+const Category = require("../models/Category");
 
-module.exports = function validateCategoryInput(data) {
-  let errors = {};
+const categoryValidator = [
+  body("name")
+    .notEmpty()
+    .withMessage("Name is required")
+    .bail()
+    .custom((input) => {
+      return Category.findOne({ name: input }).then(() => {
+        return Promise.reject("A category with the name is already added");
+      });
+    }),
+  body("description")
+    .trim()
+    .isLength({ max: 1025 })
+    .withMessage("Description should be less than 1025 characters")
+    .optional(),
+  check("created_by")
+    .isUUID()
+    .withMessage("Invalid user id")
+    .bail()
+    .custom((input) => {
+      return User.findById(input).then((user) => {
+        if (!user) {
+          return Promise.reject("Invalid user id");
+        }
+      });
+    }),
+];
 
-  data.name = validText(data.name) ? data.name : "";
-
-  if (!Validator.isLength(data.name, { min: 5, max: 140 })) {
-    errors.name = "Category must be between 5 and 140 characters";
-  }
-
-  if (Validator.isEmpty(data.name)) {
-    errors.name = "Name field is required";
-  }
-
-  return {
-    errors,
-    isValid: Object.keys(errors).length === 0,
-  };
-};
+module.exports = categoryValidator;

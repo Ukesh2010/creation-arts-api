@@ -20,6 +20,10 @@ ProductSchema = new Schema({
     type: Number,
     required: true,
   },
+  description: {
+    type: String,
+    required: false,
+  },
   images: [
     {
       originalname: { type: String, required: true },
