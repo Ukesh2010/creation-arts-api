@@ -3,7 +3,7 @@ const Schema = mongoose.Schema;
 
 const UserSchema = new Schema(
   {
-    handle: {
+    role: {
       type: String,
       required: true,
     },

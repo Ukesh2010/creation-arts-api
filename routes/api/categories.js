@@ -4,24 +4,24 @@ const passport = require("passport");
 
 const Category = require("../../models/Category");
 const validateCategoryInput = require("../../validation/categories");
+const { isAdmin } = require("../../middlewares/role");
 
 router.get("/", (req, res) => {
   Category.find()
     .then((data) => res.json(data))
-    .catch((err) => res.status(404).json({ message: "No categories found." }));
+    .catch((err) => res.json({ message: "No result found" }));
 });
 
 router.get("/:id", (req, res) => {
   Category.findById(req.params.id)
     .then((data) => res.json(data))
-    .catch((err) =>
-      res.status(404).json({ message: "No category found with that ID" })
-    );
+    .catch((err) => res.status(404).json({ message: "Category not found" }));
 });
 
 router.post(
   "/",
   passport.authenticate("jwt", { session: false }),
+  isAdmin(),
   (req, res) => {
     const { errors, isValid } = validateCategoryInput(req.body);
 
@@ -36,6 +36,54 @@ router.post(
     });
 
     newCategory.save().then((data) => res.json(data));
+  }
+);
+router.put(
+  "/:id",
+  passport.authenticate("jwt", { session: false }),
+  isAdmin(),
+  async (req, res) => {
+    const { errors, isValid } = validateCategoryInput(req.body);
+
+    if (!isValid) {
+      return res.status(400).json(errors);
+    }
+
+    Category.findById(req.params.id)
+      .then((category) => {
+        category.name = req.body.name;
+        category.description = req.body.description;
+
+        category
+          .save()
+          .then((data) => res.json(data))
+          .catch((err) => {
+            res.status(400).json({ message: "Error while updating category" });
+          });
+      })
+      .catch((err) => {
+        res.status(404).json({ message: "Category not found" });
+      });
+  }
+);
+
+router.delete(
+  "/:id",
+  passport.authenticate("jwt", { session: false }),
+  isAdmin(),
+  (req, res) => {
+    Category.findById(req.params.id)
+      .then((category) => {
+        category
+          .delete()
+          .then(() => {
+            res.json({ message: "Category deleted successfully" });
+          })
+          .catch((err) => {
+            res.status(400).json({ message: "Error while deleting category" });
+          });
+      })
+      .catch((err) => res.status(404).json({ message: "Category not found" }));
   }
 );
 

@@ -7,6 +7,16 @@ const uniqueString = require("unique-string");
 
 const Product = require("../../models/Product");
 const validateProductInput = require("../../validation/products");
+const { isAdmin } = require("../../middlewares/role");
+
+const uploadMiddleware = multer({
+  storage: multer.diskStorage({
+    destination: "uploads/",
+    filename: function (req, file, cb) {
+      cb(null, uniqueString() + path.extname(file.originalname));
+    },
+  }),
+}).array("images", 8);
 
 router.get("/", (req, res) => {
   Product.find()
@@ -45,19 +55,11 @@ router.get("/:id", (req, res) => {
       res.status(404).json({ message: "No product found with that ID" })
     );
 });
-const uploadMiddleware = multer({
-  // dest: "uploads/",
-  storage: multer.diskStorage({
-    destination: "uploads/",
-    filename: function (req, file, cb) {
-      cb(null, uniqueString() + path.extname(file.originalname));
-    },
-  }),
-}).array("images", 8);
 
 router.post(
   "/",
   passport.authenticate("jwt", { session: false }),
+  isAdmin(),
   uploadMiddleware,
   (req, res) => {
     const { errors, isValid } = validateProductInput(req.body);
@@ -75,6 +77,63 @@ router.post(
     });
 
     newProduct.save().then((product) => res.json(product));
+  }
+);
+router.put(
+  "/:id",
+  passport.authenticate("jwt", { session: false }),
+  isAdmin(),
+  uploadMiddleware,
+  (req, res) => {
+    const { errors, isValid } = validateProductInput(req.body);
+
+    if (!isValid) {
+      return res.status(400).json(errors);
+    }
+
+    Product.findById(req.params.id)
+      .then((product) => {
+        product.category = req.body.category;
+        product.name = req.body.name;
+        product.price = req.body.price;
+        if (req.files.length > 0) product.images = req.files;
+
+        product
+          .save()
+          .then((product) => res.json(product))
+          .catch((err) => {
+            res.status(400).json({ message: "Error while updating product" });
+          });
+      })
+      .catch((err) => {
+        res.status(404).json({ message: "No product found" });
+      });
+  }
+);
+
+router.delete(
+  "/:id",
+  passport.authenticate("jwt", { session: false }),
+  isAdmin(),
+  uploadMiddleware,
+  (req, res) => {
+    Product.findById(req.params.id)
+      .then((product) => {
+        product
+          .delete()
+          .then(() => {
+            res.json({ message: "Product deleted successfully" });
+          })
+          .catch((err) => {
+            res.status(400).json({ message: "Error while deleting product" });
+          });
+      })
+      .catch((err) => {
+        res.status(404).json({ message: "No product found" });
+      });
+
+    if (!product) {
+    }
   }
 );
 
