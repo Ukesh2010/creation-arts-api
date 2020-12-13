@@ -2,16 +2,17 @@ const express = require("express");
 const app = express();
 const bodyParser = require("body-parser");
 const passport = require("passport");
+var cors = require("cors");
 const users = require("./routes/api/users");
 const categories = require("./routes/api/categories");
 const products = require("./routes/api/products");
 
+app.use(cors());
 app.use("/static", express.static("uploads"));
-
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-
 app.use(passport.initialize());
+
 require("./config/passport")(passport);
 
 app.get("/", (req, res) => {
