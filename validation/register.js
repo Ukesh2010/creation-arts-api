@@ -1,50 +1,25 @@
-// register.js
+const { body } = require("express-validator");
 
-const Validator = require("validator");
-const validText = require("./valid-text");
+const registerValidator = [
+  body("role").not().isEmpty().isIn(["admin", "customer"]),
+  body("email")
+    .isEmail()
+    .normalizeEmail()
+    .custom((input) => {
+      return User.findOne({ email: input }).then(() => {
+        return Promise.reject(
+          "A user has already registered with this address"
+        );
+      });
+    }),
+  body("password").isLength({ min: 8 }),
+  body("password2").custom((input, meta) => {
+    if (meta.req.body.password === input) {
+      return true;
+    }
 
-module.exports = function validateRegisterInput(data) {
-  let errors = {};
+    return false;
+  }),
+];
 
-  data.role = validText(data.role) ? data.role : "";
-  data.email = validText(data.email) ? data.email : "";
-  data.password = validText(data.password) ? data.password : "";
-  data.password2 = validText(data.password2) ? data.password2 : "";
-
-  if (!Validator.isLength(data.role, { min: 2, max: 30 })) {
-    errors.role = "role must be between 2 and 30 characters";
-  }
-
-  if (Validator.isEmpty(data.role)) {
-    errors.role = "role field is required";
-  }
-
-  if (Validator.isEmpty(data.email)) {
-    errors.email = "Email field is required";
-  }
-
-  if (!Validator.isEmail(data.email)) {
-    errors.email = "Email is invalid";
-  }
-
-  if (Validator.isEmpty(data.password)) {
-    errors.password = "Password field is required";
-  }
-
-  if (!Validator.isLength(data.password, { min: 6, max: 30 })) {
-    errors.password = "Password must be at least 6 characters";
-  }
-
-  if (Validator.isEmpty(data.password2)) {
-    errors.password2 = "Confirm Password field is required";
-  }
-
-  if (!Validator.equals(data.password, data.password2)) {
-    errors.password2 = "Passwords must match";
-  }
-
-  return {
-    errors,
-    isValid: Object.keys(errors).length === 0,
-  };
-};
+module.exports = registerValidator;

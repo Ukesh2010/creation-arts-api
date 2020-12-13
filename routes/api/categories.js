@@ -3,8 +3,9 @@ const router = express.Router();
 const passport = require("passport");
 
 const Category = require("../../models/Category");
-const validateCategoryInput = require("../../validation/categories");
 const { isAdmin } = require("../../middlewares/role");
+const categoryValidator = require("../../validation/categories");
+const validate = require("../../validation/validate");
 
 router.get("/", (req, res) => {
   Category.find()
@@ -22,13 +23,9 @@ router.post(
   "/",
   passport.authenticate("jwt", { session: false }),
   isAdmin(),
+  categoryValidator,
+  validate,
   (req, res) => {
-    const { errors, isValid } = validateCategoryInput(req.body);
-
-    if (!isValid) {
-      return res.status(400).json(errors);
-    }
-
     const newCategory = new Category({
       createdBy: req.user.id,
       name: req.body.name,
@@ -42,13 +39,9 @@ router.put(
   "/:id",
   passport.authenticate("jwt", { session: false }),
   isAdmin(),
+  categoryValidator,
+  validate,
   async (req, res) => {
-    const { errors, isValid } = validateCategoryInput(req.body);
-
-    if (!isValid) {
-      return res.status(400).json(errors);
-    }
-
     Category.findById(req.params.id)
       .then((category) => {
         category.name = req.body.name;
