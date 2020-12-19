@@ -1,11 +1,14 @@
 const express = require("express");
 const app = express();
+
 const bodyParser = require("body-parser");
 const passport = require("passport");
 var cors = require("cors");
+
 const users = require("./routes/api/users");
 const categories = require("./routes/api/categories");
 const products = require("./routes/api/products");
+const orders = require("./routes/api/orders");
 
 app.use(cors());
 app.use("/static", express.static("uploads"));
@@ -22,6 +25,7 @@ app.get("/", (req, res) => {
 app.use("/api/users", users);
 app.use("/api/categories", categories);
 app.use("/api/products", products);
+app.use("/api/orders", orders);
 
 const port = process.env.PORT || 5000;
 
