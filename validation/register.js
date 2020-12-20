@@ -6,10 +6,12 @@ const registerValidator = [
     .isEmail()
     .normalizeEmail()
     .custom((input) => {
-      return User.findOne({ email: input }).then(() => {
-        return Promise.reject(
-          "A user has already registered with this address"
-        );
+      return User.findOne({ email: input }).then((user) => {
+        if (user) {
+          return Promise.reject(
+            "A user has already registered with this address"
+          );
+        }
       });
     }),
   body("password").isLength({ min: 8 }),
