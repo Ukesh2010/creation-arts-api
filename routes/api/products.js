@@ -38,10 +38,11 @@ router.get("/", (req, res) => {
     .catch((err) => res.status(404).json({ message: err.message }));
 });
 
-router.get("/:id", (req, res) => {
-  Product.findById(req.params.id)
-    .lean()
-    .then(({ images, ...item }) =>
+router.get("/:id", async (req, res) => {
+  try {
+    const product = await Product.findById(req.params.id).lean();
+    if (product) {
+      const { images, ...item } = product;
       res.json({
         ...item,
         images: images
@@ -50,11 +51,13 @@ router.get("/:id", (req, res) => {
               url: `${req.protocol}://${req.get("host")}/static/${filename}`,
             }))
           : [],
-      })
-    )
-    .catch((err) =>
-      res.status(404).json({ message: "No product found with that ID" })
-    );
+      });
+    } else {
+      throw new Error("Product not found");
+    }
+  } catch (e) {
+    res.status(404).json({ message: e.message });
+  }
 });
 
 router.post(

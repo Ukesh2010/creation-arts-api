@@ -13,10 +13,17 @@ router.get("/", (req, res) => {
     .catch((err) => res.json({ message: "No result found" }));
 });
 
-router.get("/:id", (req, res) => {
-  Category.findById(req.params.id)
-    .then((data) => res.json(data))
-    .catch((err) => res.status(404).json({ message: "Category not found" }));
+router.get("/:id", async (req, res) => {
+  try {
+    const category = await Category.findById(req.params.id);
+    if (category) {
+      res.json(category);
+    } else {
+      throw new Error("Category not found");
+    }
+  } catch (e) {
+    res.status(404).json({ message: e.message });
+  }
 });
 
 router.post(
