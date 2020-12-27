@@ -17,17 +17,6 @@ const categoryValidator = [
     .isLength({ max: 1025 })
     .withMessage("Description should be less than 1025 characters")
     .optional(),
-  check("created_by")
-    .isUUID()
-    .withMessage("Invalid user id")
-    .bail()
-    .custom((input) => {
-      return User.findById(input).then((user) => {
-        if (!user) {
-          return Promise.reject("Invalid user id");
-        }
-      });
-    }),
 ];
 
 module.exports = categoryValidator;
