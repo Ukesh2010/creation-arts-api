@@ -11,7 +11,10 @@ const productValidator = [
     .withMessage("Name should be between 5 to 124 characters")
     .bail()
     .custom((input) => {
-      return Product.findOne({ name: input }).then((product) => {
+      return Product.findOne({
+        name: input,
+        _id: { $ne: meta.req.params.id },
+      }).then((product) => {
         if (product)
           return Promise.reject("A product with the name is already added");
       });
@@ -38,17 +41,6 @@ const productValidator = [
       return Category.findOne({ _id: input }).then((category) => {
         if (!category) {
           return Promise.reject("Invalid category");
-        }
-      });
-    }),
-  check("created_by")
-    .isUUID()
-    .withMessage("Invalid user id")
-    .bail()
-    .custom((input) => {
-      return User.findById(input).then((user) => {
-        if (!user) {
-          return Promise.reject("Invalid user id");
         }
       });
     }),

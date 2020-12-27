@@ -1,4 +1,4 @@
-const { check, body } = require("express-validator");
+const { body } = require("express-validator");
 const Category = require("../models/Category");
 
 const categoryValidator = [
@@ -6,8 +6,11 @@ const categoryValidator = [
     .notEmpty()
     .withMessage("Name is required")
     .bail()
-    .custom((input) => {
-      return Category.findOne({ name: input }).then((category) => {
+    .custom((input, meta) => {
+      return Category.findOne({
+        name: input,
+        _id: { $ne: meta.req.params.id },
+      }).then((category) => {
         if (category)
           return Promise.reject("A category with the name is already added");
       });
