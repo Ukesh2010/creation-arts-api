@@ -10,7 +10,7 @@ const productValidator = [
     .isLength({ min: 5, max: 124 })
     .withMessage("Name should be between 5 to 124 characters")
     .bail()
-    .custom((input) => {
+    .custom((input, meta) => {
       return Product.findOne({
         name: input,
         _id: { $ne: meta.req.params.id },
@@ -33,17 +33,13 @@ const productValidator = [
     .isLength({ min: 5, max: 1024 })
     .withMessage("Description should be between 5 to 1024 characters")
     .optional(),
-  check("category")
-    .isUUID()
-    .withMessage("Invalid category")
-    .bail()
-    .custom((input) => {
-      return Category.findOne({ _id: input }).then((category) => {
-        if (!category) {
-          return Promise.reject("Invalid category");
-        }
-      });
-    }),
+  check("category").custom((input) => {
+    return Category.findOne({ _id: input }).then((category) => {
+      if (!category) {
+        return Promise.reject("Invalid category");
+      }
+    });
+  }),
 ];
 
 module.exports = productValidator;
