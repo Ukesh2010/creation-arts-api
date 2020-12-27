@@ -15,6 +15,11 @@ const OrderSchema = new Schema({
     ref: "User",
   },
   paypal_order_id: String,
+  status: {
+    type: String,
+    enum: ["pending", "cancelled", "delivered"],
+    default: "pending",
+  },
 });
 
 const Order = mongoose.model("Order", OrderSchema);

@@ -3,6 +3,7 @@ const express = require("express");
 const passport = require("passport");
 
 const Order = require("../../models/Order");
+const { isAdmin } = require("../../middlewares/role");
 const { isCustomer } = require("../../middlewares/role");
 const router = express.Router();
 
@@ -64,8 +65,10 @@ router.post(
           quantity,
           total_amount,
         })),
+        total_amount: orderData.total_amount,
         user: user.id,
         paypal_order_id: paypalOrderId,
+        status: "pending",
       });
       await order.save();
       const response = await client().execute(request);
@@ -73,6 +76,30 @@ router.post(
       res.status(200).json(response);
     } catch (e) {
       res.status(500).json({ message: e.message });
+    }
+  }
+);
+
+router.put(
+  "/:id/status",
+  passport.authenticate("jwt", { session: false }),
+  isAdmin(),
+  async (req, res) => {
+    const orderId = req.params.id;
+    const status = req.body.status;
+
+    try {
+      const order = await Order.findById(orderId);
+      if (!order) {
+        throw { status: 404, message: "Order not found" };
+      }
+      order.status = status;
+      await order.save();
+
+      res.json({ message: "Order status updated successfully" });
+    } catch (e) {
+      const status = e.status || 400;
+      res.status(status).json({ message: e.message });
     }
   }
 );
