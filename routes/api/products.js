@@ -40,7 +40,9 @@ router.get("/", (req, res) => {
 
 router.get("/:id", async (req, res) => {
   try {
-    const product = await Product.findById(req.params.id).lean();
+    const product = await Product.findById(req.params.id)
+      .populate("category")
+      .lean();
     if (product) {
       const { images, ...item } = product;
       res.json({
