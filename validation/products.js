@@ -11,8 +11,9 @@ const productValidator = [
     .withMessage("Name should be between 5 to 124 characters")
     .bail()
     .custom((input) => {
-      return Product.findOne({ name: input }).then(() => {
-        return Promise.reject("A product with the name is already added");
+      return Product.findOne({ name: input }).then((product) => {
+        if (product)
+          return Promise.reject("A product with the name is already added");
       });
     }),
   check("price")

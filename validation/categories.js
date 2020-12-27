@@ -7,8 +7,9 @@ const categoryValidator = [
     .withMessage("Name is required")
     .bail()
     .custom((input) => {
-      return Category.findOne({ name: input }).then(() => {
-        return Promise.reject("A category with the name is already added");
+      return Category.findOne({ name: input }).then((category) => {
+        if (category)
+          return Promise.reject("A category with the name is already added");
       });
     }),
   body("description")
