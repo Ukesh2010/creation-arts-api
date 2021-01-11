@@ -8,6 +8,7 @@ const { isCustomer } = require("../../middlewares/role");
 const router = express.Router();
 
 const { client } = require("../../config/paypal");
+const { sendOrderConfirmationEmail } = require("../../emails/orders");
 
 function buildRequestBody($amount = {}) {
   return {
@@ -72,6 +73,7 @@ router.post(
       });
       await order.save();
       const response = await client().execute(request);
+      sendOrderConfirmationEmail(user.email);
 
       res.status(200).json(response);
     } catch (e) {
