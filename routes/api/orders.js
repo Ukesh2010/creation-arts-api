@@ -8,7 +8,7 @@ const { isCustomer } = require("../../middlewares/role");
 const router = express.Router();
 
 const { client } = require("../../config/paypal");
-const { sendOrderConfirmationEmail } = require("../../emails/orders");
+const { sendOrderConfirmationEmail } = require("../../services/sendEmail");
 
 function buildRequestBody($amount = {}) {
   return {
@@ -73,7 +73,20 @@ router.post(
       });
       await order.save();
       const response = await client().execute(request);
-      sendOrderConfirmationEmail(user.email);
+      const newOrder = await Order.findById(order._id)
+        .populate("items.product")
+        .populate("user")
+        .lean();
+      newOrder.items = newOrder.items.map((item) => {
+        const filename = item.product.images[0].filename;
+
+        return {
+          ...item,
+          imageUrl: `${req.protocol}://${req.get("host")}/static/${filename}`,
+        };
+      });
+
+      sendOrderConfirmationEmail(user.email, newOrder.items);
 
       res.status(200).json(response);
     } catch (e) {

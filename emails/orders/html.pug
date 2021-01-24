@@ -1,0 +1,174 @@
+doctype transitional
+html(lang='en')
+    head
+        title Responsive Email Template
+        meta(http-equiv='Content-Type' content='text/html charset=UTF-8')
+        meta(name='viewport' content='width=device-width, initial-scale=1')
+        meta(http-equiv='X-UA-Compatible' content='IE=edge')
+        style(type='text/css').
+            /* Stop WebKit from changing text sizes */
+            body,
+            table,
+            td,
+            a {
+                -webkit-text-size-adjust: 100%;
+                -ms-text-size-adjust: 100%;
+                font-family: Helvetica, Arial, sans-serif;
+            }
+
+            body {
+                height: 100% !important;
+                margin: 0 !important;
+                padding: 0 !important;
+                width: 100% !important;
+            }
+
+            /* Removes spacing between tables in Outlook 2007+ */
+            table,
+            td {
+                mso-table-lspace: 0pt;
+                mso-table-rspace: 0pt;
+            }
+
+            img {
+                border: 0;
+                line-height: 100%;
+                text-decoration: none;
+                -ms-interpolation-mode: bicubic; /* Smoother rendering in IE */
+            }
+
+            table {
+                border-collapse: collapse !important;
+            }
+
+            /* iOS Blue Links */
+            a[x-apple-data-detectors] {
+                color: inherit !important;
+                text-decoration: none !important;
+                font-size: inherit !important;
+                font-family: inherit !important;
+                font-weight: inherit !important;
+                line-height: inherit !important;
+                color: currentColor !important;
+            }
+
+            .wrapper {
+                max-width: 600px;
+                width: 100%;
+                margin: 0 auto;
+            }
+
+            .product-row td {
+                padding: 8px;
+            }
+
+            /* Mobile Styling */
+            @media screen and (max-width: 480px) {
+                .wrapper {
+                    width: 100% !important;
+                    max-width: 100% !important;
+                }
+
+                .mobile-btn {
+                    padding: 12px 24px;
+                }
+            }
+    body(style='margin: 0 !important; padding: 0 !important')
+        table.wrapper(role='presentation' border='0' cellpadding='0' cellspacing='0')
+            // Logo Row
+            tbody
+                tr
+                    td(align='center')
+                        table(role='presentation' border='0' cellpadding='0' cellspacing='0' width='100%')
+                            tbody
+                                tr
+                                    td(align='center' style='padding: 40px 0 0 0')
+                                        a(href='#' title='Creation Arts' target='_blank')
+                                            img(src='cid:logo' width='auto' height='80' alt='Logo' style='display: block; border: 0; width: auto; height: 80px' border='0')
+                // Message Row
+                tr
+                    td(bgcolor='#ffffff' align='center' style='padding: 16px 0')
+                        table(role='presentation' border='0' cellpadding='0' cellspacing='0' width='100%')
+                            tbody
+                                tr
+                                    td
+                                        table(role='presentation' width='100%' border='0' cellspacing='0' cellpadding='0')
+                                            tbody
+                                                tr
+                                                    td
+                                                        table(role='presentation' width='100%' border='0' cellspacing='0' cellpadding='0')
+                                                            tbody
+                                                                tr
+                                                                    td(align='left')
+                                                                        h1(style='\
+                                    font-size: 28px;\
+                                    font-weight: normal;\
+                                    color: #212529;\
+                                    margin: 0;\
+                                    mso-line-height-rule: exactly;\
+                                    ')
+                                                                            | Order Details
+                                                                tr
+                                                                    td(align='center' height='25' style='height: 25px; font-size: 0')
+                                                                tr
+                                                                    td(align='left' style='\
+                                  font-family: Helvetica, Arial, sans-serif;\
+                                  font-size: 16px;\
+                                  line-height: 25px;\
+                                  color: #212529;\
+                                  ')
+                                                                        | Here are your order details.
+                                                tr
+                                                    td(align='center' height='25' style='height: 25px; font-size: 0')
+                                                                                       
+                // Product List Row
+                tr
+                    td(bgcolor='#ffffff' align='center' style='padding: 16px 0')
+                        table(role='presentation' border='0' cellpadding='0' cellspacing='0' width='100%')
+                            tbody
+                                each item in items
+                                    tr.product-row
+                                        td(style='width: 72px')
+                                            img(src=`${item.imageUrl}` width='64px' height='auto' alt=`${item.product.name}` style='display: block; border: 0; width: auto; height: 80px' border='0')
+                                        td
+                                            span(style='display: block; padding: 4px 0;') #{item.product.name}
+                                            span(style='display: block; font-size: 14px; color: #495057; padding: 2px 0;') Qty: #{item.quantity}
+                                            span(style='display: block; font-size: 14px; color: #495057; padding: 2px 0;') | Total: $#{item.total_amount}
+                // Footer Row
+                tr
+                    td(align='center' bgcolor='#212529' style='background-color: #212529')
+                        table(role='presentation' width='240' border='0' cellspacing='0' cellpadding='0')
+                            tbody
+                                tr
+                                    td(align='center' style='padding: 24px 0')
+                                        table(role='presentation' border='0' cellspacing='0' cellpadding='0')
+                                            tbody
+                                                tr
+                                                    td(align='center' style='padding: 0 16px')
+                                                        a(href='#' title='Facebook' target='_blank')
+                                                            img(src='cid:facebook' height='40' width='40' alt='Facebook' style='\
+                              display: block;\
+                              border: 0;\
+                              width: 40px;\
+                              height: 40px;\
+                              ')
+                                                    td(align='center' style='padding: 0 16px')
+                                                        a(href='#' title='Instagram' target='_blank')
+                                                            img(src='cid:instagram' height='40' width='40' alt='Instagram' style='\
+                              display: block;\
+                              border: 0;\
+                              width: 40px;\
+                              height: 40px;\
+                              ')
+                                tr
+                                    td(align='center' style='\
+                  font-size: 14px;\
+                  color: #ffffff;\
+                  line-height: 1.5;\
+                  padding: 24px 0;\
+                  border-top: 1px solid rgba(255, 255, 255, 0.12);\
+                  ')
+                                        span Contact Information Here
+                                        br
+                                        br
+                                        span © 2020 All rights reserved

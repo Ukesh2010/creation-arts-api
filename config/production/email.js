@@ -1,8 +1,8 @@
 module.exports = {
-  host: "smtp.googlemail.com",
+  host: "mail.yalatreasure.com",
   port: 465,
   auth: {
-    user: "test.ukesh2010@gmail.com",
-    pass: "yzfxvmuioupgmrqq",
+    user: "noreply@yalatreasure.com",
+    pass: "Y@latreasure1234",
   },
 };
