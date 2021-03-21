@@ -20,7 +20,17 @@ const uploadMiddleware = multer({
 }).array("images", 8);
 
 router.get("/", (req, res) => {
-  Product.find()
+  const query = {};
+
+  const { isFeatured, limit } = req.query;
+
+  if (isFeatured) {
+    query.isFeatured = isFeatured;
+  }
+
+  Product.find(query)
+    .sort({ createdAt: "desc" })
+    .limit(limit ? Number(limit) : undefined)
     .populate("category")
     .lean()
     .then((products) => {
@@ -76,6 +86,7 @@ router.post(
       name: req.body.name,
       price: req.body.price,
       images: req.files,
+      isFeatured: req.body.is_featured || false,
     });
 
     newProduct.save().then((product) => res.json(product));
@@ -94,6 +105,7 @@ router.put(
         product.category = req.body.category;
         product.name = req.body.name;
         product.price = req.body.price;
+        product.isFeatured = req.body.is_featured;
         if (req.files.length > 0) product.images = req.files;
 
         product
