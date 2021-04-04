@@ -137,6 +137,52 @@ router.post("/reset-password", (req, res) => {
   });
 });
 
+router.post(
+  "/change-password",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    const oldPassword = req.body.old_password;
+    const password = req.body.password;
+
+    User.findById(req.user.id).then((user) => {
+      if (!user) {
+        res.status(401).json({ message: "No current user found." });
+      } else {
+        bcrypt.compare(oldPassword, user.password).then((isMatch) => {
+          if (!isMatch) {
+            res.status(401).json({ message: "Invalid old password" });
+          } else {
+            bcrypt.genSalt(10, (err, salt) => {
+              bcrypt.hash(password, salt, (err, hash) => {
+                if (err) {
+                  res.status(400).json({
+                    message:
+                      err.message || "Error while generating password hash",
+                  });
+                } else {
+                  user.password = hash;
+                  user
+                    .save()
+                    .then((user) => {
+                      res
+                        .status(200)
+                        .json({ message: "Password changed successfully" });
+                    })
+                    .catch((err) => {
+                      res.status(400).json({
+                        message: err.message || "Error while changing password",
+                      });
+                    });
+                }
+              });
+            });
+          }
+        });
+      }
+    });
+  }
+);
+
 router.put(
   "/current",
   passport.authenticate("jwt", { session: false }),
