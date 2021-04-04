@@ -65,10 +65,14 @@ router.get(
   "/current",
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
-    res.json({
-      id: req.user.id,
-      role: req.user.role,
-      email: req.user.email,
+    User.findById(req.user.id).then((user) => {
+      if (!user) {
+        return res
+          .status(401)
+          .json({ message: "No user found with given email." });
+      }
+
+      res.json(user);
     });
   }
 );
@@ -132,5 +136,35 @@ router.post("/reset-password", (req, res) => {
     }
   });
 });
+
+router.put(
+  "/current",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    const name = req.body.name;
+    const contactNo = req.body.contact_no;
+    const fullAddress = req.body.full_address;
+    User.findById(req.user.id).then((user) => {
+      if (!user) {
+        return res.status(401).json({ message: "No user found." });
+      }
+      user.name = name;
+      user.contact_no = contactNo;
+      user.full_address = fullAddress;
+      user
+        .save()
+        .then((user) => {
+          res
+            .status(200)
+            .json({ message: "User updated successfully", data: user });
+        })
+        .catch((err) => {
+          res.status(400).json({
+            message: err.message || "Error while updating user",
+          });
+        });
+    });
+  }
+);
 
 module.exports = router;
