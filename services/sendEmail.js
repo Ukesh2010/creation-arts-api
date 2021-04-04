@@ -47,4 +47,13 @@ const sendOrderConfirmationEmail = (to, items) => {
     });
 };
 
-module.exports = { sendOrderConfirmationEmail };
+const sendPasswordResetLink = (to, token) => {
+  transport.sendMail({
+    from: emailConfig.auth.user,
+    to: to,
+    subject: "Password reset",
+    html: `<a href='http://yalatreasure.com/reset-password?token=${token}'>Reset password</a>`,
+  });
+};
+
+module.exports = { sendOrderConfirmationEmail, sendPasswordResetLink };
