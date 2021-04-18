@@ -1,5 +1,5 @@
-const mongoose = require('mongoose')
-const Schema = mongoose.Schema
+const mongoose = require("mongoose");
+const Schema = mongoose.Schema;
 
 SettingSchema = new Schema({
   bannerImage: [
@@ -10,6 +10,7 @@ SettingSchema = new Schema({
       path: { type: String, required: true },
     },
   ],
-})
+  description: { type: String },
+});
 
-module.exports = Setting = mongoose.model('Setting', SettingSchema)
+module.exports = Setting = mongoose.model("Setting", SettingSchema);
