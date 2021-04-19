@@ -87,6 +87,7 @@ router.post(
       price: req.body.price,
       images: req.files,
       isFeatured: req.body.is_featured || false,
+      description: req.body.description,
     });
 
     newProduct.save().then((product) => res.json(product));
@@ -102,10 +103,22 @@ router.put(
   (req, res) => {
     Product.findById(req.params.id)
       .then((product) => {
-        product.category = req.body.category;
-        product.name = req.body.name;
-        product.price = req.body.price;
-        product.isFeatured = req.body.is_featured;
+        if (req.body.category) {
+          product.category = req.body.category;
+        }
+
+        if (req.body.name) {
+          product.name = req.body.name;
+        }
+        if (req.body.price) {
+          product.price = req.body.price;
+        }
+        if (req.body.description) {
+          product.description = req.body.description;
+        }
+        if (req.body.is_featured) {
+          product.isFeatured = req.body.is_featured;
+        }
         if (req.files.length > 0) product.images = req.files;
 
         product
@@ -141,9 +154,6 @@ router.delete(
       .catch((err) => {
         res.status(404).json({ message: "No product found" });
       });
-
-    if (!product) {
-    }
   }
 );
 
