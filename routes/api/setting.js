@@ -10,10 +10,7 @@ const uniqueString = require("unique-string");
 router.get("/", function (req, res) {
   Setting.findOne()
     .lean()
-    .then(function (settings, error) {
-      if (error) {
-        return res.json(error).status(400);
-      }
+    .then(function (settings) {
       return res.json({
         data: {
           url: `${req.protocol}://${req.get("host")}/static/${
@@ -22,6 +19,9 @@ router.get("/", function (req, res) {
           description: settings.description,
         },
       });
+    })
+    .catch(function (error) {
+      return res.status(400).json({ error: error });
     });
 });
 
