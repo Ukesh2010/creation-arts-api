@@ -53,13 +53,11 @@ router.post(
   async (req, res) => {
     const user = req.user;
     const body = req.body;
-    const paypalOrderId = body.paypal_order_id;
     const orderData = body.order;
-    const request = new checkoutNodeJssdk.orders.OrdersCaptureRequest(
-      paypalOrderId
-    );
-    request.requestBody({});
+    const paypalOrderId = body.paypal_order_id;
     try {
+      let response = { success: true, message: "Order created successfully" };
+
       const order = new Order({
         items: orderData.items.map(({ quantity, total_amount, _id }) => ({
           product: _id,
@@ -72,7 +70,13 @@ router.post(
         status: "pending",
       });
       await order.save();
-      const response = await client().execute(request);
+      if (paypalOrderId) {
+        const request = new checkoutNodeJssdk.orders.OrdersCaptureRequest(
+          paypalOrderId
+        );
+        request.requestBody({});
+        response = await client().execute(request);
+      }
       const newOrder = await Order.findById(order._id)
         .populate("items.product")
         .populate("user")
@@ -88,7 +92,9 @@ router.post(
 
       sendOrderConfirmationEmail(user.email, newOrder.items, {
         logo_link: `${req.protocol}://${req.get("host")}/assets/logo.png`,
-        facebook_link: `${req.protocol}://${req.get("host")}/assets/facebook.png`,
+        facebook_link: `${req.protocol}://${req.get(
+          "host"
+        )}/assets/facebook.png`,
         instagram_link: `${req.protocol}://${req.get("host")}/assets/insta.png`,
       });
 
