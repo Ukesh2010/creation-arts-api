@@ -86,7 +86,11 @@ router.post(
         };
       });
 
-      sendOrderConfirmationEmail(user.email, newOrder.items);
+      sendOrderConfirmationEmail(user.email, newOrder.items, {
+        logo_link: `${req.protocol}://${req.get("host")}/assets/logo.png`,
+        facebook_link: `${req.protocol}://${req.get("host")}/assets/facebook.png`,
+        instagram_link: `${req.protocol}://${req.get("host")}/assets/insta.png`,
+      });
 
       res.status(200).json(response);
     } catch (e) {

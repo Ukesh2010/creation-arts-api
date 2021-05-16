@@ -13,6 +13,7 @@ const setting = require('./routes/api/setting')
 
 app.use(cors())
 app.use('/static', express.static('uploads'))
+app.use('/assets', express.static('assets'))
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 app.use(passport.initialize())

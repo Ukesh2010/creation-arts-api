@@ -13,7 +13,7 @@ const email = new Email({
   transport: transport,
 });
 
-const sendOrderConfirmationEmail = (to, items) => {
+const sendOrderConfirmationEmail = (to, items, assets) => {
   email
     .send({
       template: "orders",
@@ -22,24 +22,8 @@ const sendOrderConfirmationEmail = (to, items) => {
       },
       locals: {
         items: items,
+        assets: assets,
       },
-      attachments: [
-        {
-          filename: "logo.jpg",
-          path: `${__dirname}/../emails/orders/images/logo.png`,
-          cid: "logo",
-        },
-        {
-          filename: "facebook.png",
-          path: `${__dirname}/../emails/orders/images/facebook.png`,
-          cid: "facebook",
-        },
-        {
-          filename: "instagram.jpg",
-          path: `${__dirname}/../emails/orders/images/insta.png`,
-          cid: "instagram",
-        },
-      ],
     })
     .then(() => {})
     .catch((error) => {
