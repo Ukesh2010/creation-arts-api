@@ -145,27 +145,34 @@ router.get(
         user.role === "customer"
           ? await getCustomerOrders(user)
           : await getAllOrders();
-      res.json(
-        orders.map(({ items, ...order }) => ({
-          ...order,
-          items: items.map(({ product: { images, ...product }, ...item }) => {
+
+      const formattedOrders = orders.map((orderItem) => {
+        const { items, ...order } = orderItem;
+
+        const formattedItems = items
+          .filter((item) => item.product)
+          .map((item) => {
+            const { product, ...others } = item;
+
+            product.images =
+              product.images?.map(({ originalname, filename }) => ({
+                originalFileName: originalname,
+                url: `${req.protocol}://${req.get("host")}/static/${filename}`,
+              })) || [];
+
             return {
-              ...item,
-              product: {
-                ...product,
-                images: images
-                  ? images.map(({ originalname, filename }) => ({
-                      originalFileName: originalname,
-                      url: `${req.protocol}://${req.get(
-                        "host"
-                      )}/static/${filename}`,
-                    }))
-                  : [],
-              },
+              product,
+              ...others,
             };
-          }),
-        }))
-      );
+          });
+
+        return {
+          ...order,
+          items: formattedItems,
+        };
+      });
+
+      res.json(formattedOrders);
     } catch (e) {
       res.status(400).json({ message: e.message });
     }
@@ -192,22 +199,22 @@ router.get(
 
       res.json({
         ...rest,
-        items: items.map(({ product: { images, ...product }, ...item }) => {
-          return {
-            ...item,
-            product: {
-              ...product,
-              images: images
-                ? images.map(({ originalname, filename }) => ({
-                    originalFileName: originalname,
-                    url: `${req.protocol}://${req.get(
-                      "host"
-                    )}/static/${filename}`,
-                  }))
-                : [],
-            },
-          };
-        }),
+        items: items
+          .filter((item) => item.product)
+          .map((item) => {
+            const { product, ...others } = item;
+
+            product.images =
+              product.images?.map(({ originalname, filename }) => ({
+                originalFileName: originalname,
+                url: `${req.protocol}://${req.get("host")}/static/${filename}`,
+              })) || [];
+
+            return {
+              product,
+              ...others,
+            };
+          }),
       });
     } catch (e) {
       const status = e.status || 400;

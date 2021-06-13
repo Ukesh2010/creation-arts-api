@@ -6,6 +6,7 @@ const path = require("path");
 const uniqueString = require("unique-string");
 
 const Product = require("../../models/Product");
+const Order = require("../../models/Order");
 const { isAdmin } = require("../../middlewares/role");
 const productValidator = require("../../validation/products");
 const validate = require("../../validation/validate");
