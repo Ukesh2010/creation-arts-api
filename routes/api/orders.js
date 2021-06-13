@@ -155,10 +155,14 @@ router.get(
             const { product, ...others } = item;
 
             product.images =
-              product.images?.map(({ originalname, filename }) => ({
-                originalFileName: originalname,
-                url: `${req.protocol}://${req.get("host")}/static/${filename}`,
-              })) || [];
+              (product.images &&
+                product.images.map(({ originalname, filename }) => ({
+                  originalFileName: originalname,
+                  url: `${req.protocol}://${req.get(
+                    "host"
+                  )}/static/${filename}`,
+                }))) ||
+              [];
 
             return {
               product,
@@ -205,10 +209,14 @@ router.get(
             const { product, ...others } = item;
 
             product.images =
-              product.images?.map(({ originalname, filename }) => ({
-                originalFileName: originalname,
-                url: `${req.protocol}://${req.get("host")}/static/${filename}`,
-              })) || [];
+              (product.images &&
+                product.images.map(({ originalname, filename }) => ({
+                  originalFileName: originalname,
+                  url: `${req.protocol}://${req.get(
+                    "host"
+                  )}/static/${filename}`,
+                }))) ||
+              [];
 
             return {
               product,
