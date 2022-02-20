@@ -37,6 +37,7 @@ router.post(
       createdBy: req.user.id,
       name: req.body.name,
       description: req.body.description,
+      parentCategory: req.body.parentCategory,
     });
 
     newCategory.save().then((data) => res.json(data));
@@ -53,7 +54,7 @@ router.put(
       .then((category) => {
         category.name = req.body.name;
         category.description = req.body.description;
-
+        category.parentCategory = req.body.parentCategory;
         category
           .save()
           .then((data) => res.json(data))

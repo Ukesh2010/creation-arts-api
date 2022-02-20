@@ -15,6 +15,11 @@ CategorySchema = new Schema({
     type: String,
     required: false,
   },
+  parentCategory: {
+    type: Schema.Types.ObjectId,
+    ref: "Category",
+    required: false,
+  },
 });
 
 module.exports = Category = mongoose.model("Category", CategorySchema);
